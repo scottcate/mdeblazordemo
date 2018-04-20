@@ -1,0 +1,38 @@
+﻿@page "/todolist/{name}"
+@using MdeBlazor.Models;
+
+<h1>TODO List</h1>
+<h4>Total Items: @Items.Count()</h4>
+<h4>Completed Items: @Items.Where(t => t.IsComplete).Count()</h4>
+
+<ul>
+    @foreach (var item in Items)
+    {
+        <li>
+            <input type="checkbox" bind="@item.IsComplete" />
+            @item.Title
+        </li>
+    }
+</ul>
+
+<h2>Add Item</h2>
+<input bind="@newTitle" placeholder="Item Name" />
+<button onclick="@AddItem">Add Item</button>
+
+<h1>Written by: @Name</h1>
+<h2>The Date Is: @now.ToString("yyyy-MMM-dd")</h2>
+
+@functions  {
+    IList<ToDoItem> Items { get; set; } = new List<ToDoItem>();
+    public string Name { get; set; }
+    public string newTitle { get; set; }
+    public DateTime now { get; set; } = DateTime.Now;
+    void AddItem()
+    {
+        if (!string.IsNullOrWhiteSpace(newTitle))
+        {
+            Items.Add(new ToDoItem { Title = newTitle });
+            newTitle = string.Empty;
+        }
+    }
+}
